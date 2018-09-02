@@ -38,8 +38,8 @@ class EventController extends Controller
         $this->validate($request, [
             'name' =>  'required',
             'description' =>  'required',
-            'beginning_date' =>  'required',
-            'end_date' =>  'required',
+            'beginning_date' =>  'required|date',
+            'end_date' =>  'required|date',
         ]);
 
         $event = new Event;
@@ -101,9 +101,7 @@ class EventController extends Controller
 
         if($event->save()){
             return redirect()->action('EventController@index'); 
-        }
-        
-        return redirect()->action('EventController@index');
+        }   
     }
 
     /**

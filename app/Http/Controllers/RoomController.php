@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Room;
+use App\Models\Location;
 
 class RoomController extends Controller
 {
@@ -13,7 +15,7 @@ class RoomController extends Controller
      */
     public function index()
     {
-        //
+        return view('room.index', ['rooms' => Room::paginate(10)]);
     }
 
     /**
@@ -23,7 +25,7 @@ class RoomController extends Controller
      */
     public function create()
     {
-        //
+        return view('room.create', ['locations' => Location::pluck('name', 'id')]);
     }
 
     /**
@@ -34,18 +36,28 @@ class RoomController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'name' =>  'required',
+            'capacity' =>  'required',
+            'seats_type' =>  'required',
+            'location_id' =>  'required',
+        ]);
+
         $room = new Room;
         
         $room->name = $request->input('name');
-        $room->descripition = $request->input('descripition');
+        $room->description = $request->input('description');
         $room->capacity = $request->input('capacity');
-        $room->avaible_video_projector = $request->input('avaible_video_projector', 0);
-        $room->avaible_AC = $request->input('avaible_AC', 0);      
-        $room->avaible_seats = $request->input('avaible_seats');
+        $room->available_video_projector = $request->input('available_video_projector', 0);
+        $room->available_AC = $request->input('available_AC', 0);      
+        $room->available_seats = $request->input('available_seats');
         $room->seats_type = $request->input('seats_type');
         $room->location_id = $request->input('location_id');
         
-        $room->save();
+        if($room->save()){
+            return redirect()->action('RoomController@index'); 
+        }
+        
     }
 
     /**
@@ -56,7 +68,7 @@ class RoomController extends Controller
      */
     public function show($id)
     {
-        //
+        return view('room.show', ['room' => Room::find($id)]);
     }
 
     /**
@@ -67,7 +79,7 @@ class RoomController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('room.edit', ['room' => Room::find($id), 'locations' => Location::pluck('name', 'id')]);
     }
 
     /**
@@ -79,18 +91,28 @@ class RoomController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->validate($request, [
+            'name' =>  'required',
+            'capacity' =>  'required',
+            'seats_type' =>  'required',
+            'location_id' =>  'required',
+        ]);
+        
         $room = Room::find($id);
 
         $room->name = $request->input('name');
-        $room->descripition = $request->input('descripition');
+        $room->description = $request->input('description');
         $room->capacity = $request->input('capacity');
-        $room->avaible_video_projector = $request->input('avaible_video_projector', 0);
-        $room->avaible_AC = $request->input('avaible_AC', 0);      
-        $room->avaible_seats = $request->input('avaible_seats');
+        $room->available_video_projector = $request->input('available_video_projector', 0);
+        $room->available_AC = $request->input('available_AC', 0);      
+        $room->available_seats = $request->input('available_seats');
         $room->seats_type = $request->input('seats_type');
         $room->location_id = $request->input('location_id');
         
-        $room->save();
+        if($room->save()){
+            return redirect()->action('RoomController@index'); 
+        }
+        
     }
 
     /**
@@ -101,6 +123,8 @@ class RoomController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $room = Room::findOrFail($id);
+        $room->delete();
+        return redirect()->action('RoomController@index');
     }
 }

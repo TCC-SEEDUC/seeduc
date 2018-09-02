@@ -27,7 +27,7 @@
       <td><a href="http://localhost:8080/events/{{$event->id}}/edit">Alterar</a></td>
     </tr>
     @empty
-    deu ruim
+    <h5 style="color: red;">Não Possui Registros Cadastrados!</h5>
     @endforelse
   </tbody>
 </table>
