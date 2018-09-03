@@ -5,6 +5,8 @@
 
 <mat-divider></mat-divider>
 
+<!--Criar um app post para cada post -->
+<app-post *ngFor="let p of posts" [post]="p"></app-post>
 
 <button mat-mini-fab color="primary" class="float-button">
     <mat-icon>add</mat-icon>

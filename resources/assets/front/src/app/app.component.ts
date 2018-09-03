@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Post } from './post';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,9 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'front';
+  //Aqui receberemos os objetos laravel via HttpRequest
+  private posts: Post[] = [
+    new Post("João", "Meu post", "Sub joão", "joao@gmail.com", "Minha Mensagem"),
+    new Post("João", "Meu post", "Sub joão", "joao@gmail.com", "Minha Mensagem"),
+  ];
 }
