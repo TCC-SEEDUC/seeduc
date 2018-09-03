@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Location;
 
 class LocationController extends Controller
 {
@@ -13,7 +14,7 @@ class LocationController extends Controller
      */
     public function index()
     {
-        //
+        return view('location.index', ['locations' => Location::paginate(10)]);
     }
 
     /**
@@ -23,7 +24,7 @@ class LocationController extends Controller
      */
     public function create()
     {
-        //
+        return view('location.create');
     }
 
     /**
@@ -34,6 +35,16 @@ class LocationController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'name' =>  'required',
+            'postal_code' =>  'required',
+            'adress_number' =>  'required',
+            'full_adress' =>  'required',
+            'district' =>  'required',
+            'city' =>  'required',
+            'state' =>  'required',
+        ]);
+
         $location = new Location;
 
         $location->name = $request->input('name');
@@ -47,11 +58,15 @@ class LocationController extends Controller
         $location->reference_point = $request->input('reference_point');
         $location->work_days = $request->input('work_days');
         $location->open_hours = $request->input('open_hours');
-        $location->Close_hour = $request->input('Close_hour');
+        $location->close_hour = $request->input('close_hour');
         $location->manager_name = $request->input('manager_name');
         $location->manager_phone_number = $request->input('manager_phone_number');
         $location->manager_email = $request->input('manager_email');
-        $location->save();
+
+        if($location->save()){
+            return redirect()->action('LocationController@index'); 
+        }
+        
     }
 
     /**
@@ -62,7 +77,7 @@ class LocationController extends Controller
      */
     public function show($id)
     {
-        //
+        return view('location.show', ['location' => Location::find($id)]);
     }
 
     /**
@@ -73,7 +88,7 @@ class LocationController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('location.edit', ['location' => Location::find($id)]);
     }
 
     /**
@@ -86,6 +101,17 @@ class LocationController extends Controller
     public function update(Request $request, $id)
     {
         $location = Location::find($id);
+
+        $this->validate($request, [
+            'name' =>  'required',
+            'postal_code' =>  'required',
+            'adress_number' =>  'required',
+            'full_adress' =>  'required',
+            'district' =>  'required',
+            'city' =>  'required',
+            'state' =>  'required',
+        ]);
+
         $location->name = $request->input('name');
         $location->postal_code = $request->input('postal_code');
         $location->adress_number = $request->input('adress_number');
@@ -97,12 +123,14 @@ class LocationController extends Controller
         $location->reference_point = $request->input('reference_point');
         $location->work_days = $request->input('work_days');
         $location->open_hours = $request->input('open_hours');
-        $location->Close_hour = $request->input('Close_hour');
+        $location->close_hour = $request->input('close_hour');
         $location->manager_name = $request->input('manager_name');
         $location->manager_phone_number = $request->input('manager_phone_number');
         $location->manager_email = $request->input('manager_email');
 
-        $location->save();
+        if($location->save()){
+            return redirect()->action('LocationController@index'); 
+        }
         
     }
 
@@ -114,6 +142,8 @@ class LocationController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $location = Location::findOrFail($id);
+        $location->delete();
+        return redirect()->action('LocationController@index');
     }
 }

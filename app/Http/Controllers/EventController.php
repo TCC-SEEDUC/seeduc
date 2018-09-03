@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Event;
 
 class EventController extends Controller
 {
@@ -13,7 +14,7 @@ class EventController extends Controller
      */
     public function index()
     {
-        //
+        return view('event.index', ['events' => Event::paginate(10)]);
     }
 
     /**
@@ -23,7 +24,7 @@ class EventController extends Controller
      */
     public function create()
     {
-        //
+        return view('event.create');
     }
 
     /**
@@ -34,18 +35,23 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'name' =>  'required',
+            'description' =>  'required',
+            'beginning_date' =>  'required|date',
+            'end_date' =>  'required|date',
+        ]);
+
         $event = new Event;
 
         $event->name = $request->input('name');
         $event->description = $request->input('description');
-        $event->date = $request->input('date');
-        $event->hour = $request->input('hour');
+        $event->beginning_date = $request->input('beginning_date');
+        $event->end_date = $request->input('end_date');
 
-        $event->minimum_quorum = $request->input('minimum_quorum');
-        $event->max_capacity = $request->input('max_capacity');   
-
-        $event->save();
-        return redirect()->action('EventController@index'); 
+        if($event->save()){
+            return redirect()->action('EventController@index'); 
+        }
     }
 
     /**
@@ -56,7 +62,7 @@ class EventController extends Controller
      */
     public function show($id)
     {
-        //
+        return view('event.show', ['event' => Event::find($id)]);
     }
 
     /**
@@ -67,7 +73,7 @@ class EventController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('event.edit', ['event' => Event::find($id)]);
     }
 
     /**
@@ -80,15 +86,22 @@ class EventController extends Controller
     public function update(Request $request, $id)
     {
         $event = Event::find($id);
+        
+        $this->validate($request, [
+            'name' =>  'required',
+            'description' =>  'required',
+            'beginning_date' =>  'required',
+            'end_date' =>  'required',
+        ]);
+
         $event->name = $request->input('name');
         $event->description = $request->input('description');
-        $event->date = $request->input('date');
-        $event->hour = $request->input('hour');
-        $event->minimum_quorum = $request->input('minimum_quorum');
-        $event->max_capacity = $request->input('max_capacity');   
-        
-        $event->save();
-        return redirect()->action('EventController@index');
+        $event->beginning_date = $request->input('beginning_date');
+        $event->end_date = $request->input('end_date');
+
+        if($event->save()){
+            return redirect()->action('EventController@index'); 
+        }   
     }
 
     /**
@@ -101,5 +114,6 @@ class EventController extends Controller
     {
         $event = Event::findOrFail($id);
         $event->delete();
+        return redirect()->action('EventController@index');
     }
 }
