@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Models\Schedule;
 class ScheduleController extends Controller
 {
     /**
@@ -13,7 +13,7 @@ class ScheduleController extends Controller
      */
     public function index()
     {
-        //
+        return view('schedule.index', ['schedules' => Schedule::paginate(10) ]);
     }
 
     /**
@@ -23,7 +23,7 @@ class ScheduleController extends Controller
      */
     public function create()
     {
-        //
+        return view('schedule.create');
     }
 
     /**
@@ -34,7 +34,21 @@ class ScheduleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'name' =>  'required',
+            'begin_at' =>  'required',
+            'finish_at' =>  'required',
+        ]);
+
+        $schedule = new Schedule;
+
+        $schedule->name = $request->input('name');
+        $schedule->begin_at = $request->input('begin_at');
+        $schedule->finish_at = $request->input('finish_at');
+
+        if($schedule->save()){
+            return redirect()->action('ScheduleController@index'); 
+        }
     }
 
     /**
@@ -45,7 +59,7 @@ class ScheduleController extends Controller
      */
     public function show($id)
     {
-        //
+        return view('schedule.show', ['schedules' => Schedule::find($id)]);
     }
 
     /**
@@ -56,7 +70,7 @@ class ScheduleController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('schedule.edit', ['schedule' => Schedule::find($id)]);
     }
 
     /**
@@ -68,7 +82,21 @@ class ScheduleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $schedule = Schedule::find($id);
+
+        $this->validate($request, [
+            'name' =>  'required',
+            'begin_at' =>  'required',
+            'finish_at' =>  'required',
+        ]);
+
+        $schedule->name = $request->input('name');
+        $schedule->begin_at = $request->input('begin_at');
+        $schedule->finish_at = $request->input('finish_at');
+
+        if($schedule->save()){
+            return redirect()->action('ScheduleController@index'); 
+        }
     }
 
     /**
@@ -79,6 +107,8 @@ class ScheduleController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $schedule = Schedule::findOrFail($id);
+        $schedule->delete();
+        return redirect()->action('ScheduleController@index');
     }
 }
