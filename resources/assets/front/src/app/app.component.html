@@ -1,0 +1,17 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<mat-toolbar color="primary">
+  <span>SEEDUC</span>
+</mat-toolbar>
+
+<mat-divider></mat-divider>
+
+
+<!--Criar um app post para cada post -->
+<div fxLayout="row wrap" fxLayoutAlign="space-around stretch" >
+  <app-post *ngFor="let p of posts" [post]="p"></app-post>
+</div>
+
+<button mat-mini-fab color="primary" class="float-button" (click)="openDialog()">
+    <mat-icon>add</mat-icon>
+</button>
+

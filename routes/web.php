@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-	return view('welcome');
+	return view('index');
 });
 
 #Controllers Routes - Index, Create, Store, Show, Edit, Update & Destroy
