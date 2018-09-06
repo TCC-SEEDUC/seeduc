@@ -6,14 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class FeedbackQuiz extends Model
 {
-    /**
-     * Pesquisar: não sei tabelas de resolução usam relacionamento 
-     * belongsTo ou não possuem relacionamentos internos
-    */
-
-    #One to One relationships
-
-    #One to Many relationships
-
-    #Many to Many relationships
+    #Many to One relationships
+    public function usersFeedback(){
+        return $this->belongsToMany('App\Models\UsersFeedback');
+    }
 }

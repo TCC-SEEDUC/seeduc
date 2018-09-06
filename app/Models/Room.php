@@ -9,7 +9,7 @@ class Room extends Model
     #One to One relationships
 
     public function location(){
-        return $this->belongsTO('App\Models\Location');
+        return $this->belongsTo('App\Models\Location');
     }
 
     #One to Many relationships

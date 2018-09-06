@@ -6,8 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class UsersRole extends Model
 {
-    #One to One relationships
-    #One to Many relationships
-    #Many to Many relationships
+    #Many to One relationships
+    public function user(){
+        return $this->belongsTo('App\Models\User');
+    }
+    public function role(){
+        return $this->belongsTo('App\Models\Role');
+    }
 
 }
