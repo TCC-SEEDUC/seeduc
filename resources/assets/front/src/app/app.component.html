@@ -8,7 +8,7 @@
 
 <!--Criar um app post para cada post -->
 <div fxLayout="row wrap" fxLayoutAlign="space-around stretch" >
-  <app-post *ngFor="let p of posts" [post]="p"></app-post>
+  <app-event *ngFor="let e of events" [event]="e"></app-event>
 </div>
 
 <button mat-mini-fab color="primary" class="float-button" (click)="openDialog()">

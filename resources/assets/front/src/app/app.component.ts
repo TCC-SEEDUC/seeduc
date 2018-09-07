@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { Post } from './post';
+import { Event } from './event';
 import { MatDialog } from '@angular/material';
-import { PostDialogComponent } from './post-dialog/post-dialog.component';
+import { EventDialogComponent } from './event-dialog/event-dialog.component';
+import { EventService } from './event.service';
 
 @Component({
   selector: 'app-root',
@@ -10,18 +11,31 @@ import { PostDialogComponent } from './post-dialog/post-dialog.component';
 })
 export class AppComponent {
   title = 'front';
+
   //Aqui receberemos os objetos laravel via HttpRequest
-  private posts: Post[] = [
-    new Post("João", "Meu post", "Sub joão", "joao@gmail.com", "Minha Mensagem"),
-    new Post("João", "Meu post", "Sub joão", "joao@gmail.com", "Minha Mensagem"),
-  ];
+  private events: Event[];
 
-  constructor(public dialog: MatDialog){
+  constructor(
+    public dialog: MatDialog,
+    public eventService: EventService
+  ){}
 
-  }
+  //Esta função é chamada após o construtor depois que toda a parte gráfica é carregada
+  //O angular executa essa função automáticamente
+  ngOnInit(){
+    this.events = this.eventService.events; 
+  } 
 
   openDialog(){
-    const dialogRef = this.dialog.open(PostDialogComponent, 
+    const dialogRef = this.dialog.open(EventDialogComponent, 
       { width: '600px' });
+    dialogRef.afterClosed().subscribe(
+      (result) => {
+        if (result) {
+          console.log(result);
+          this.eventService.save(result.event, result.arquivo); 
+        }
+      }
+    )
   }
 }

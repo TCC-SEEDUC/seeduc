@@ -13,18 +13,19 @@ import {MatChipsModule} from '@angular/material/chips';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatBadgeModule} from '@angular/material/badge';
-
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatNativeDateModule } from '@angular/material';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
-import { PostComponent } from './post/post.component';
-import { PostDialogComponent } from './post-dialog/post-dialog.component';
-
+import { EventComponent } from './event/event.component';
+import { EventDialogComponent } from './event-dialog/event-dialog.component';
+import { EventService } from './event.service';
 
 @NgModule({
   declarations: [
     AppComponent,
-    PostComponent,
-    PostDialogComponent,
+    EventComponent,
+    EventDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -44,13 +45,15 @@ import { PostDialogComponent } from './post-dialog/post-dialog.component';
     MatDialogModule,
     MatChipsModule,
     MatBadgeModule,
-
+    MatDatepickerModule,
+    MatNativeDateModule,
+ 
   ],
   providers: [
-    
+    EventService,
   ],
   entryComponents: [
-    PostDialogComponent
+    EventDialogComponent
   ],
   bootstrap: [AppComponent]
 })
