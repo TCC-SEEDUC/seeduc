@@ -26,8 +26,9 @@ Route::resource('locations', 'LocationController');
 Route::resource('quizzes', 'QuizController');
 Route::resource('rooms', 'RoomController');
 Route::resource('schedules', 'ScheduleController');
-Route::resource('speakers', 'SpekaersController');
+Route::resource('speakers', 'SpeakerController');
 Route::resource('tickets', 'TicketController');
+Route::resource('infos', 'InternalInfoController');
 
 #Controller Routes - Differents Kinds of routes
 

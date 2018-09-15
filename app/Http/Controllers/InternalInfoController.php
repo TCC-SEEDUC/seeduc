@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Internal_info;
 
 class InternalInfoController extends Controller
 {
@@ -13,7 +14,7 @@ class InternalInfoController extends Controller
      */
     public function index()
     {
-        //
+        return view('internal.index', ['infos' => Internal_info::paginate(10)]);
     }
 
     /**
@@ -23,7 +24,7 @@ class InternalInfoController extends Controller
      */
     public function create()
     {
-        //
+        return view('internal.create');
     }
 
     /**
@@ -34,7 +35,21 @@ class InternalInfoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'name' =>  'required',
+            'cpf' =>  'required',
+            'register_id' =>  'required',
+        ]);
+
+        $info = new Internal_info;
+
+        $info->name = $request->input('name');
+        $info->cpf = $request->input('cpf');
+        $info->register_id = $request->input('register_id');
+
+        if($info->save()){
+            return redirect()->action('InternalInfoController@index'); 
+        }
     }
 
     /**
@@ -45,7 +60,7 @@ class InternalInfoController extends Controller
      */
     public function show($id)
     {
-        //
+       return view('internal.show', ['info' => Internal_info::find($id)]);
     }
 
     /**
@@ -56,7 +71,7 @@ class InternalInfoController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('internal.edit', ['info' => Internal_info::find($id)]);
     }
 
     /**
@@ -68,7 +83,21 @@ class InternalInfoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $info = Internal_info::find($id);
+
+        $this->validate($request, [
+            'name' =>  'required',
+            'cpf' =>  'required',
+            'register_id' =>  'required',
+        ]);
+
+        $info->name = $request->input('name');
+        $info->cpf = $request->input('cpf');
+        $info->register_id = $request->input('register_id');
+
+        if($info->save()){
+            return redirect()->action('InternalInfoController@index'); 
+        }
     }
 
     /**
@@ -79,6 +108,9 @@ class InternalInfoController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $info = Internal_info::findOrFail($id);
+        if($info->delete()){
+            return redirect()->action('InternalInfoController@index');
+        }
     }
 }

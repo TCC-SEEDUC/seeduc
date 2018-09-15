@@ -3,6 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Activity;
+use App\Models\Event;
+use App\Models\Schedule;
+use App\Models\Room;
+use App\Models\Location;
+use App\Models\Bond;
+use App\Models\Speaker;
 
 class ActivityController extends Controller
 {
@@ -13,7 +20,8 @@ class ActivityController extends Controller
      */
     public function index()
     {
-        //
+        return view('activity.index', ['activities' => Activity::with('event', 'location', 'room', 'schedule')
+            ->paginate(10) ]);
     }
 
     /**
@@ -23,7 +31,14 @@ class ActivityController extends Controller
      */
     public function create()
     {
-        //
+        return view('activity.create', [
+            'events'  => Event::pluck('name', 'id'), 
+            'schedules'  => Schedule::pluck('name', 'id'), 
+            'locations'  => Location::pluck('name', 'id'),
+            'rooms'  => Room::pluck('name', 'id'),
+            'bonds' => Bond::pluck('name', 'id'),
+            'speakers' => Speaker::pluck('name', 'id'),
+        ]);
     }
 
     /**
@@ -34,18 +49,33 @@ class ActivityController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'name' =>  'required',
+            'description' =>  'required',
+            'beginning_date' =>  'required|date',
+            'schedule_id' =>  'required|numeric',
+            'event_id' =>  'required|numeric',
+            'location_id' =>  'required|numeric',
+            'room_id' =>  'required|numeric',
+            'minimum_quorum' =>  'required|numeric',
+            'maximum_capacity' =>  'required|numeric',
+            'bond_id' =>  'numeric',
+            'speaker_id' =>  'required|numeric',
+        ]);
+        //Inserir nas tabelas de resolução.
+        #$activity->bond_id = $request->input('bond_id');
+        #$activity->speaker_id = $request->input('speaker_id'); 
         $activity = new Activity;
 
         $activity->name = $request->input('name');
         $activity->description = $request->input('description');
         $activity->beginning_date = $request->input('beginning_date');
-        $activity->period = $request->input('period');
+        $activity->schedule_id = $request->input('schedule_id');
         $activity->minimum_quorum = $request->input('minimum_quorum');
         $activity->maximum_capacity = $request->input('maximum_capacity');
         $activity->event_id = $request->input('event_id');
         $activity->location_id = $request->input('location_id');
-        $activity->bond_id = $request->input('public_id');
-        $activity->room_id = $request->input('room');
+        $activity->room_id = $request->input('room_id');
         
         $activity->save();
     }
@@ -58,7 +88,8 @@ class ActivityController extends Controller
      */
     public function show($id)
     {
-        //
+        return view('activity.show', ['activity' => Activity::with('event', 'location', 'room', 'schedule')
+            ->find($id) ]);
     }
 
     /**
@@ -69,7 +100,13 @@ class ActivityController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('activity.edit', ['activity' => Activity::find($id), 'events'  => Event::pluck('name', 'id'), 
+            'schedules'  => Schedule::pluck('name', 'id'), 
+            'locations'  => Location::pluck('name', 'id'),
+            'rooms'  => Room::pluck('name', 'id'),
+            'bonds' => Bond::pluck('name', 'id'),
+            'speakers' => Speaker::pluck('name', 'id')]);
+        
     }
 
     /**
@@ -81,21 +118,36 @@ class ActivityController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $activity = Activity::find($request->input('id'));
-        $activity->room_id = $request->input('room_id');
+        $activity = Activity::find($id);
+        $this->validate($request, [
+            'name' =>  'required',
+            'description' =>  'required',
+            'beginning_date' =>  'required|date',
+            'schedule_id' =>  'required|numeric',
+            'event_id' =>  'required|numeric',
+            'location_id' =>  'required|numeric',
+            'room_id' =>  'required|numeric',
+            'minimum_quorum' =>  'required|numeric',
+            'maximum_capacity' =>  'required|numeric',
+            'bond_id' =>  'numeric',
+            'speaker_id' =>  'required|numeric',
+        ]);
+        //Inserir nas tabelas de resolução.
+        #$activity->bond_id = $request->input('bond_id');
+        #$activity->speaker_id = $request->input('speaker_id'); 
+
         $activity->name = $request->input('name');
         $activity->description = $request->input('description');
         $activity->beginning_date = $request->input('beginning_date');
-        $activity->period = $request->input('period');
+        $activity->schedule_id = $request->input('schedule_id');
         $activity->minimum_quorum = $request->input('minimum_quorum');
         $activity->maximum_capacity = $request->input('maximum_capacity');
         $activity->event_id = $request->input('event_id');
         $activity->location_id = $request->input('location_id');
-        //$activity->bond_id = $request->input('bonds');
-        $activity->description_speaker = $request->input('description_speaker');
-
+        $activity->room_id = $request->input('room_id');
+        
         $activity->save();
-        return redirect()->action('ActivityController@show');
+        return redirect()->action('ActivityController@index');
     }
 
     /**

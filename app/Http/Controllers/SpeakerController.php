@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Speaker;
 
 class SpeakerController extends Controller
 {
@@ -13,7 +14,7 @@ class SpeakerController extends Controller
      */
     public function index()
     {
-        //
+        return view('speaker.index', ['speakers' => Speaker::paginate(10)]);
     }
 
     /**
@@ -23,7 +24,7 @@ class SpeakerController extends Controller
      */
     public function create()
     {
-        //
+        return view('speaker.create');
     }
 
     /**
@@ -34,6 +35,11 @@ class SpeakerController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'name' =>  'required',
+            'type' =>  'required',
+        ]);
+
         $speaker = new Speaker;
 
         $speaker->name = $request->input('name');
@@ -43,8 +49,10 @@ class SpeakerController extends Controller
         $speaker->twitter = $request->input('twitter');
         $speaker->small_desc = $request->input('small_desc');
         $speaker->website = $request->input('website');
-              
-        $speaker->save();
+
+        if($speaker->save()){
+            return redirect()->action('SpeakerController@index'); 
+        }
     }
 
     /**
@@ -55,7 +63,7 @@ class SpeakerController extends Controller
      */
     public function show($id)
     {
-        //
+        return view('speaker.show', ['speaker' => Speaker::find($id)]);
     }
 
     /**
@@ -66,7 +74,7 @@ class SpeakerController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('speaker.edit', ['speaker' => Speaker::find($id)]);
     }
 
     /**
@@ -78,6 +86,11 @@ class SpeakerController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->validate($request, [
+            'name' =>  'required',
+            'type' =>  'required',
+        ]);
+
         $speaker = Speaker::find($id);
 
         $speaker->name = $request->input('name');
@@ -88,7 +101,9 @@ class SpeakerController extends Controller
         $speaker->small_desc = $request->input('small_desc');
         $speaker->website = $request->input('website');
 
-        $speaker->save();
+        if($speaker->save()){
+            return redirect()->action('SpeakerController@index'); 
+        }
     }
 
     /**
@@ -99,6 +114,9 @@ class SpeakerController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $speaker = Speaker::findOrFail($id);
+        if($speaker->delete()){
+            return redirect()->action('SpeakerController@index');
+        }
     }
 }

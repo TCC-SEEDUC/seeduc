@@ -24,6 +24,10 @@ class Activity extends Model
         return $this->belongsTo('App\Models\Room');
     }
 
+    public function schedule(){
+        return $this->belongsTo('App\Models\Schedule');
+    }
+
     #One to Many relationships
 
 
