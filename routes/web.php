@@ -29,6 +29,7 @@ Route::resource('schedules', 'ScheduleController');
 Route::resource('speakers', 'SpeakerController');
 Route::resource('tickets', 'TicketController');
 Route::resource('infos', 'InternalInfoController');
+Route::resource('subscriptions', 'SubscriptionController');
 
 #Controller Routes - Differents Kinds of routes
 

@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Activity;
+use App\Models\Subscription;
+use App\Services\Verificate;
+
 use Illuminate\Http\Request;
 
 class SubscriptionController extends Controller
@@ -34,12 +38,25 @@ class SubscriptionController extends Controller
      */
     public function store(Request $request)
     {
-        $subscription = new Subscription;
+        $this->validate($request, [
+            'user_id' =>  'required|numeric',
+            'activity_id' =>  'required|numeric',
+        ]);
 
-        $subscription->user_id = $request->input('user_id');
-        $subscription->activity_id = $request->input('activity_id');
+        $verificate = new Verificate;
+        #Verificações antes da inscrição do usuário | (Está incrito? Palestra cheia? Evento mesmo horário?)
+        $is_signed = $verificate->is_signed($request->input('user_id'), $request->input('activity_id'));
+        $is_full = $verificate->is_full($request->input('activity_id'));
+        $event_time = $verificate->event_time($request->input('user_id'), $request->input('activity_id'));
 
-        $subscription->save();
+        if ($is_signed != true && $is_full != true && $event_time != true) {
+            $subscription = new Subscription;
+                $subscription->user_id = $request->input('user_id');
+                $subscription->activity_id = $request->input('activity_id');
+            if ($subscription->save()) 
+                return redirect()->action('FeedController@index');
+        }
+        print_r("Já Cadastrado ou Cheio ou Evento no mesmo horário ");   
     }
 
     /**
@@ -89,6 +106,7 @@ class SubscriptionController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Subscription::destroy($id);
+        return redirect()->action('FeedController@index');
     }
 }

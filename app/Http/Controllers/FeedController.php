@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Activity;
+use App\Models\Subscription;
+
 use Illuminate\Http\Request;
 
 class FeedController extends Controller
@@ -13,7 +16,8 @@ class FeedController extends Controller
      */
     public function index()
     {
-        //
+        return view('feed.index', ['activities' => Activity::with('event', 'location', 'room', 'schedule')
+            ->paginate(10), 'subscriptions' => Subscription::select('activity_id', 'id')->where('user_id', 3)->get()]);
     }
 
     /**
@@ -34,7 +38,7 @@ class FeedController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
     }
 
     /**
