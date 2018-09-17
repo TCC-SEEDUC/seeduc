@@ -19,6 +19,10 @@ class User extends Model
         return $this->hasMany('App\Models\Quiz');
     }
 
+    public function subscriptions(){
+        return $this->hasMany('App\Models\Subscription');
+    }
+
     #Many to Many relationships
 
     public function roles(){
@@ -30,7 +34,7 @@ class User extends Model
     * Brings the activities where the user had made subscription
     */ 
     public function activities(){
-        return $this->belongsToMany('App\Models\Subscription', 'user_id', 'activity_id');
+        return $this->belongsToMany('App\Models\Activity', 'subscriptions', 'user_id', 'activity_id');
     }
 
     public function feedbacks(){
