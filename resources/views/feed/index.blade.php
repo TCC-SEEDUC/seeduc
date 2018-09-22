@@ -2,6 +2,8 @@
 @section('title', 'Adicionar um evento')
 
 @section('content')
+<a href="http://localhost:8080/dashboards">Gestão de Eventos</a>
+<br>
 <!--Eventos que estão disponíveis para selecionar atividades-->
 <h4>Eventos Disponíveis</h4>
 <table class="table">
@@ -45,7 +47,10 @@
       <th scope="col">Descrição</th>
       <th scope="col">Data </th>
       <th scope="col">Horário</th>
-      <th></th>
+      <th scope="col">Check-in</th>
+      <th scope="col">Nos dê sua opinião</th>
+      <th scope="col">Certificado</th>
+      <th scope="col"></th>
       <th scope="col"></th>
     </tr>
   </thead>
@@ -56,18 +61,36 @@
       <th scope="row">{{ $userActivitie->activitie->id }}</th>
       <td>{{ $userActivitie->activitie->name }}</td>
       <td>{{ $userActivitie->activitie->name }}</td>
-      <td>{{ $userActivitie->activitie->beginning_date }}</td>
+      <td>{{ date("d/m/Y", strtotime($userActivitie->activitie->beginning_date)) }}</td>
       <td>{{ $userActivitie->activitie->schedule_id }}</td>
-      <td><a href="http://localhost:8080/feeds/{{$event->id}}" >Ver mais</a></td>
       <!--Cancelar Atividade em que está inscrito-->
       @foreach($userActivitie->subscriptions as $userActivitie->subscription)
+      @if( $userActivitie->subscription->activity_id == $userActivitie->activitie->id )
+        <td align="center">{{ $userActivitie->subscription->check_in == 1 ? "Sim" : "Não" }}</td>
+        @if( $userActivitie->subscription->check_in == 1 )
+          <td align="center"><a href="">Link Formulário</a></td>
+          
+          {{ Form::open(['action' => 'CertificateController@store']) }}
+            {{ Form::hidden('activity_id', $userActivitie->activitie->id) }}
+            {{ Form::hidden('user_id', 3) }}
+            {{ Form::hidden('subscription_id', $userActivitie->subscription->activity_id) }}
+            <td align="center">{{ Form::submit('Gerar', ['class' => 'btn btn-outline-info']) }}</td>
+          {{ Form::close() }}
+
+        @else
+          <td align="center">-</td>
+          <td align="center"><button class="btn btn-outline-info" disabled>Gerar</button></td>
+        @endif
+      @endif
+
       {{ Form::open(['route'=>['subscriptions.destroy',$userActivitie->subscription->id], 'method' => 'DELETE', 'onsubmit' => 'deleteConfirmation();']) }}
         @if($userActivitie->subscription->activity_id == $userActivitie->activitie->id  )
             <td>{{ Form::submit('Cancelar', ['class' => 'btn btn-outline-danger']) }}</td>
         @endif
       {{ Form::close() }}
+      
       @endforeach
-
+      <td><a href="http://localhost:8080/feeds/{{$event->id}}" >Ver mais</a></td>
     </tr>
       @empty
         <h5 style="color: red;">Não Possui Registros Cadastrados!</h5>

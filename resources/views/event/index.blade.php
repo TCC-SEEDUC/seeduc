@@ -2,7 +2,7 @@
 @section('title', 'Adicionar um evento')
 
 @section('content')
-
+<a class="nav-link active" href="http://localhost:8080/events/create">Cadastrar</a>
 <table class="table">
   <thead class="thead-dark">
     <tr>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Subscription;
 
 class CertificateController extends Controller
 {
@@ -34,7 +35,12 @@ class CertificateController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        print($request->input('activity_id'));
+        $user_subscriptions = Subscription::join('activities', 'subscriptions.activity_id', '=', 'activities.id')
+        ->join('users', 'subscriptions.user_id', '=', 'users.id')
+        ->where('activities.id', $request->input('activity_id'))
+        ->get();
+        print($user_subscriptions);
     }
 
     /**

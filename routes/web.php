@@ -17,7 +17,7 @@ Route::get('/', function () {
 
 #Controllers Routes - Index, Create, Store, Show, Edit, Update & Destroy
 Route::resource('activities', 'ActivityController');
-Route::resource('certificates', 'Certificateontroller');
+Route::resource('certificates', 'CertificateController');
 Route::resource('dashboards', 'DashboardController');
 Route::resource('events', 'EventController');
 Route::resource('feedbacks', 'FeedbackQuizController');

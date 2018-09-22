@@ -35,8 +35,9 @@
       <td><a href="http://localhost:8080/feed/{{$activity->id}}" >Ver Mais</a></td>
       <!-- Botão Inscrever-se-->
       {{ Form::open(['action' => 'SubscriptionController@store']) }}
-        {{ Form::hidden('user_id', '3') }}
+        {{ Form::hidden('user_id', '1') }}
         {{ Form::hidden('activity_id', $activity->id) }}
+        {{Form::hidden('event_id', $activity->event_id)}}
         <td>{{ Form::submit('Inscreva-se', ['class' => 'btn btn-outline-success']) }}</td>
       {{ Form::close() }}
       <!-- Botão Cancelar Inscrição -->

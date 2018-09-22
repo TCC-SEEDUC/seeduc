@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Event;
+use App\Models\Activity;
 
 use Illuminate\Http\Request;
 
@@ -13,7 +15,7 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        //
+        return view('dashboard.index', ['events' => Event::paginate(10)]);
     }
 
     /**
@@ -45,7 +47,8 @@ class DashboardController extends Controller
      */
     public function show($id)
     {
-        //
+        return view('dashboard.show', [ 'activities' => Activity::with('schedule')->where('event_id', $id)->get(), 
+            'event' => Event::where('id', $id)->get() ]);
     }
 
     /**

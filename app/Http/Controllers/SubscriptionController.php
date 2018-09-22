@@ -7,6 +7,7 @@ use App\Models\Subscription;
 use App\Services\Verificate;
 
 use Illuminate\Http\Request;
+use Redirect;
 
 class SubscriptionController extends Controller
 {
@@ -53,6 +54,7 @@ class SubscriptionController extends Controller
             $subscription = new Subscription;
                 $subscription->user_id = $request->input('user_id');
                 $subscription->activity_id = $request->input('activity_id');
+                $subscription->event_id = $request->input('event_id');
             if ($subscription->save()) 
                 return redirect()->action('FeedController@index');
         }
@@ -67,7 +69,8 @@ class SubscriptionController extends Controller
      */
     public function show($id)
     {
-        //
+        #Através do dashboard-show, recebo o id de uma atividade para dar select nas inscrições da mesma. ($id referente a uma atividade) 
+        return view('subscription.show', ['subscribers' => Activity::with('users', 'subscriptions')->where('id', $id)->paginate(10)]);
     }
 
     /**
@@ -91,11 +94,12 @@ class SubscriptionController extends Controller
     public function update(Request $request, $id)
     {
         $subscription = Subscription::find($id);
-        $subscription->user_id = $request->input('user_id');
-        $subscription->activity_id = $request->input('activity_id');
-        $subscription->certificate = $request->input('certificate');
+        $subscription->check_in = $request->input('check_in', 0);
+        $subscription->certificate = $request->input('certificate', 0);
 
-        $subscription->save();
+        if($subscription->save()){
+            return Redirect::back();
+        }
     }
 
     /**

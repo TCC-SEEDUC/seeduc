@@ -18,7 +18,7 @@ class FeedController extends Controller
      */
     public function index()
     {
-         return view('feed.index', ['events' => Event::paginate(10), 'userActivities' => User::with('activities', 'subscriptions')->where('id', 3)->paginate(10)]);
+         return view('feed.index', ['events' => Event::paginate(10), 'userActivities' => User::with('activities', 'subscriptions')->where('id', 1)->paginate(10)]);
        # return view('feed.index', ['activities' => Activity::with('event', 'location', 'room', 'schedule')
        #     ->paginate(10), 'subscriptions' => Subscription::select('activity_id', 'id')->where('user_id', 3)->get()]);
     }
@@ -53,7 +53,7 @@ class FeedController extends Controller
     public function show($id)
     {
         return view('feed.show', ['activities' => Activity::with('event', 'location', 'room', 'schedule')->where('event_id', $id)
-            ->paginate(10), 'subscriptions' => Subscription::select('activity_id', 'id')->where('user_id', 3)->get()]);
+            ->paginate(10), 'subscriptions' => Subscription::select('activity_id', 'id')->where('user_id', 1)->get()]);
     }
 
     /**
