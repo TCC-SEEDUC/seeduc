@@ -29,7 +29,10 @@ class Activity extends Model
     }
 
     #One to Many relationships
-
+    
+    public function subscriptions(){
+        return $this->hasMany('App\Models\Subscription');
+    }
 
     #Many to Many relationships
 
@@ -42,7 +45,7 @@ class Activity extends Model
     }
 
     public function users(){
-        return $this->belongsToMany('App\Models\Subscription', 'activity_id', 'user_id');
+        return $this->belongsToMany('App\Models\User', 'subscriptions', 'activity_id', 'user_id');
     }
 
     public function feedbacks(){

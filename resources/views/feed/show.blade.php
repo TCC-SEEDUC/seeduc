@@ -2,7 +2,7 @@
 @section('title', 'Adicionar uma Atividade')
 
 @section('content')
-<a class="nav-link active" href="http://localhost:8080/activities/create">Cadastrar</a>
+
 <table class="table">
   <thead class="thead-dark">
     <tr>
@@ -15,6 +15,7 @@
       <th scope="col">Evento</th>
       <th scope="col">Local</th>
       <th scope="col">Sala</th>
+      <th scope="col"></th>
       <th scope="col"></th>
       <th scope="col"></th>
     </tr>
@@ -31,8 +32,24 @@
       <td>{{ $activity->event->name }}</td>
       <td>{{ $activity->location->name }}</td>
       <td>{{ isset($activity->room) ? $activity->room->name : 'Não Possui' }}</td>    
-      <td><a href="http://localhost:8080/activities/{{$activity->id}}" >Ver Mais</a></td>
-      <td><a href="http://localhost:8080/activities/{{$activity->id}}/edit">Alterar</a></td>
+      <td><a href="http://localhost:8080/feed/{{$activity->id}}" >Ver Mais</a></td>
+      <!-- Botão Inscrever-se-->
+      {{ Form::open(['action' => 'SubscriptionController@store']) }}
+        {{ Form::hidden('user_id', '1') }}
+        {{ Form::hidden('activity_id', $activity->id) }}
+        {{Form::hidden('event_id', $activity->event_id)}}
+        <td>{{ Form::submit('Inscreva-se', ['class' => 'btn btn-outline-success']) }}</td>
+      {{ Form::close() }}
+      <!-- Botão Cancelar Inscrição -->
+      @forelse ($subscriptions as $subscription)
+        @if($subscription->activity_id == $activity->id)
+          {{ Form::open(['route'=>['subscriptions.destroy',$subscription->id], 'method' => 'DELETE', 'onsubmit' => 'deleteConfirmation();']) }}
+            <td>{{ Form::submit('Cancelar', ['class' => 'btn btn-outline-danger']) }}</td>
+          {{ Form::close() }}
+        @endif
+      @empty
+      <td>-</td>
+      @endforelse
     </tr>
     @empty
     <h5 style="color: red;">Não Possui Registros Cadastrados!</h5>

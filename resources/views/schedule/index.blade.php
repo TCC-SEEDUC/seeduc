@@ -2,7 +2,7 @@
 @section('title', 'Listar Horários')
 
 @section('content')
-
+<a class="nav-link active" href="http://localhost:8080/schedules/create">Cadastrar</a>
 <table class="table">
   <thead class="thead-dark">
     <tr>
