@@ -20,21 +20,71 @@ class AuthController extends Controller
      */
     public function register(Request $request)
     {
-        $credentials = $request->only('name', 'email', 'password');
+        $credentials = $request->only(
+            'name', 
+            'email', 
+            'password', 
+            'cpf', 
+            'full_adress',
+            'adress_number',
+            'district', 
+            'state',
+            'city',
+            'postal_code',
+            'bond_id', 
+            'role_id');
         
         $rules = [
             'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users'
+            'email' => 'required|email|max:255|unique:users',
+            'password' => 'required',
+            'cpf' => 'required',
+            'full_adress' => 'required',
+            'adress_number' => 'required',
+            'district' => 'required',
+            'city' => 'required',
+            'state' => 'required',
+            'postal_code' => 'required',
+            'bond_id' => 'required',
+            'role_id' => 'required'
         ];
+
         $validator = Validator::make($credentials, $rules);
         if($validator->fails()) {
             return response()->json(['success'=> false, 'error'=> $validator->messages()]);
         }
+
+        $password = $request->password;
+
         $name = $request->name;
-        $email = $request->email;
+        $email = $request->email; 
+        $password = Hash::make($password); 
+        $cpf = $request->cpf;
+        $full_adress = $request->full_adress;
+        $adress_number = $request->adress_number;
+        $district = $request->district;
+        $city = $request->city;
+        $state = $request->state;
+        $postal_code = $request->postal_code;
+        $bond_id = $request->bond_id; 
+        $role_id = $request->role_id;
         $password = $request->password;
         
-        $user = User::create(['name' => $name, 'email' => $email, 'password' => Hash::make($password)]);
+        $user = User::create([
+            'name' => $name,
+            'email' => $email, 
+            'password' => Hash::make($password), 
+            'cpf' => $cpf,
+            'full_adress' => $full_adress,
+            'adress_number' => $adress_number,
+            'district' => $district,
+            'city' => $city,
+            'state' => $state,
+            'postal_code' => $postal_code,
+            'bond_id' => $bond_id, 
+            'role_id' => $role_id            
+        ]);
+
         $verification_code = str_random(30); //Generate verification code
         DB::table('user_verifications')->insert(['user_id'=>$user->id,'token'=>$verification_code]);
         $subject = "Please verify your email address.";
@@ -86,8 +136,9 @@ class AuthController extends Controller
        
        $rules = [
            'email' => 'required|email',
-           'password' => 'required',
+           'password' => 'required'
        ];
+
        $validator = Validator::make($credentials, $rules);
        if($validator->fails()) {
            return response()->json(['success'=> false, 'error'=> $validator->messages()], 401);

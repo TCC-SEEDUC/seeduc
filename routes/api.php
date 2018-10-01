@@ -13,13 +13,25 @@ use Illuminate\Http\Request;
 |
 */
 
+#CUSTOM ROUTES TO HANDLE LOGIN  
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::post('register', 'AuthController@register');
+Route::post('login', 'AuthController@login');
+Route::post('recover', 'AuthController@recover');
+Route::group(['middleware' => ['jwt.auth']], function() {
+    Route::get('logout', 'AuthController@logout');
+    Route::get('test', function(){
+        return response()->json(['foo'=>'bar']);
+    });
+});
+
+
 
 #Controllers Routes - Index, Create, Store, Show, Edit, Update & Destroy
-Route::resource('activities', 'ActivityController');
+/*Route::resource('activities', 'ActivityController');
 Route::resource('certificates', 'Certificateontroller');
 Route::resource('dashboards', 'DashboardController');
 Route::resource('events', 'EventController');
@@ -30,12 +42,15 @@ Route::resource('quizzes', 'QuizController');
 Route::resource('rooms', 'RoomController');
 Route::resource('schedules', 'ScheduleController');
 Route::resource('speakers', 'SpekaersController');
-Route::resource('tickets', 'TicketController');
+Route::resource('tickets', 'TicketController');*/
+
+
+
 
 #Controller Routes - Differents Kinds of routes
-Auth::routes();
+//Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+//Route::get('/home', 'HomeController@index')->name('home');
 
 /**
  * Every route must return a json response with the command
