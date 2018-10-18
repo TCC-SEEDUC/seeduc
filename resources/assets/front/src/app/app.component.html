@@ -7,11 +7,10 @@
 
 
 <!--Criar um app post para cada post -->
-<div fxLayout="row wrap" fxLayoutAlign="space-around stretch" >
+<div fxLayout="row wrap" fxLayoutAlign="space-around stretch">
   <app-event *ngFor="let e of events" [event]="e"></app-event>
 </div>
 
 <button mat-mini-fab color="primary" class="float-button" (click)="openDialog()">
-    <mat-icon>add</mat-icon>
+  <mat-icon>add</mat-icon>
 </button>
-

@@ -28,7 +28,7 @@ Route::group(['middleware' => ['jwt.auth']], function() {
     });
 });
 
-
+Route::resource('events', 'EventController');
 
 #Controllers Routes - Index, Create, Store, Show, Edit, Update & Destroy
 /*Route::resource('activities', 'ActivityController');

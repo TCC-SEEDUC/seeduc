@@ -14,7 +14,7 @@ class EventController extends Controller
      */
     public function index()
     {
-        return view('event.index', ['events' => Event::paginate(10)]);
+        return response(Event::All(),200);
     }
 
     /**
@@ -50,8 +50,9 @@ class EventController extends Controller
         $event->end_date = $request->input('end_date');
 
         if($event->save()){
-            return redirect()->action('EventController@index'); 
+            return response($event,200);
         }
+        return response('Falhou',400);
     }
 
     /**
@@ -113,7 +114,10 @@ class EventController extends Controller
     public function destroy($id)
     {
         $event = Event::findOrFail($id);
-        $event->delete();
-        return redirect()->action('EventController@index');
+        $deleted = $event->delete();
+        if($deleted){
+            return response($event,200);
+        }
+        return response('Falhou',400);
     }
 }
