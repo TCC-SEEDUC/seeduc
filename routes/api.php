@@ -2,10 +2,8 @@
 
 use Illuminate\Http\Request;
 
-Route::get('qr-code', function () 
-{
-  return QRCode::text('QR Code Generator for Laravel!')->png();    
-});
+Route::get('qr-code', 'QrController@make');
+
 Route::resource('activities', 'ActivityController');
 Route::resource('certificates', 'CertificateController');
 Route::resource('dashboards', 'DashboardController');
@@ -25,10 +23,10 @@ Route::post('register', 'AuthController@register');
 Route::post('login', 'AuthController@login');
 Route::post('recover', 'AuthController@recover');
 Route::group(['middleware' => ['jwt.auth']], function() {
-    Route::get('logout', 'AuthController@logout');
-    Route::get('test', function(){
-        return response()->json(['foo'=>'bar']);
-    });
+	Route::get('logout', 'AuthController@logout');
+	Route::get('test', function(){
+		return response()->json(['foo'=>'bar']);
+	});
 });
 
 

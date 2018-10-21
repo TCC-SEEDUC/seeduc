@@ -69,8 +69,11 @@ class ActivityController extends Controller
         $activity->event_id = $request->input('event_id');
         $activity->location_id = $request->input('location_id');
         $activity->room_id = $request->input('room_id');
+        $file = public_path("images/activity-$activity->id.png");
+        $activity->file = $file;
 
         if($activity->save()){
+            return QRCode::text("http://localhost:8080/api/subscriptions/$activity->id")->setOutfile($file)->png(); 
             return Response($activity, 200);
         }
         return Response('Não foi possível realizar a operação', 500); 

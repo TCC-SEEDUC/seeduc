@@ -29,8 +29,8 @@ class GeneratePDF
 	{
 		print_r('eu');
 		$subscribers = Activity::with('users', 'subscriptions')->where('id', 1)->get();
-		$pdf = PDF::loadView('subscription.show', ['subscribers' => $subscribers]);
-		return $pdf->download("certificado.pdf");
+		$pdf = PDF::loadView('list.index', ['subscribers' => $subscribers]);
+		return $pdf->download("list.pdf");
 	}
 
 }

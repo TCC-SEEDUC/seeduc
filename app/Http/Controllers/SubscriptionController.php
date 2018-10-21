@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Activity;
 use App\Models\Subscription;
 use App\Services\Verificate;
+use App\Services\GeneratePDF;
 
 use Illuminate\Http\Request;
 use Redirect;
@@ -71,11 +72,11 @@ class SubscriptionController extends Controller
     public function show($id)
     {
         #Através do dashboard-show, recebo o id de uma atividade para dar select nas inscrições da mesma. ($id referente a uma atividade) 
-        return view('subscription.show', ['subscribers' => Activity::with('users', 'subscriptions')->where('id', $id)->paginate(10)]);
-        /*
-        $pdf = new GeneratePDF;
-        return $pdf->generateSubscriptionsList(1);
-        */
+        //return view('subscription.show', ['subscribers' => Activity::with('users', 'subscriptions')->where('id', $id)->paginate(10)]);
+        return view('subscription.show', ['subscribers' => Activity::with('users', 'subscriptions')->where('id', 1)->paginate(10)]);
+        /*$pdf = new GeneratePDF;
+        return $pdf->generateSubscriptionsList(1);*/
+        
     }
 
     /**
