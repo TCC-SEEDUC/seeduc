@@ -15,7 +15,8 @@ class RoomController extends Controller
      */
     public function index()
     {
-        return view('room.index', ['rooms' => Room::paginate(10)]);
+        $rooms = Room::all();
+        return Response($rooms, 200);
     }
 
     /**
@@ -25,7 +26,7 @@ class RoomController extends Controller
      */
     public function create()
     {
-        return view('room.create', ['locations' => Location::pluck('name', 'id')]);
+        //
     }
 
     /**
@@ -55,9 +56,9 @@ class RoomController extends Controller
         $room->location_id = $request->input('location_id');
         
         if($room->save()){
-            return redirect()->action('RoomController@index'); 
+            return Response($room, 200);
         }
-        
+        return Response('Não foi possível realizar a operação', 500);
     }
 
     /**
@@ -68,7 +69,8 @@ class RoomController extends Controller
      */
     public function show($id)
     {
-        return view('room.show', ['room' => Room::find($id)]);
+        $room = Room::find($id);
+        return Response($room, 200);
     }
 
     /**
@@ -79,7 +81,7 @@ class RoomController extends Controller
      */
     public function edit($id)
     {
-        return view('room.edit', ['room' => Room::find($id), 'locations' => Location::pluck('name', 'id')]);
+        //
     }
 
     /**
@@ -110,8 +112,9 @@ class RoomController extends Controller
         $room->location_id = $request->input('location_id');
         
         if($room->save()){
-            return redirect()->action('RoomController@index'); 
+            return Response($room, 200);
         }
+        return Response('Não foi possível realizar a operação', 500);
         
     }
 
@@ -124,7 +127,9 @@ class RoomController extends Controller
     public function destroy($id)
     {
         $room = Room::findOrFail($id);
-        $room->delete();
-        return redirect()->action('RoomController@index');
+        if($room->delete()){
+            return Response('Sala excluida com sucesso!', 200);
+        }
+        return Response('Não foi possível realizar a operação', 500); 
     }
 }

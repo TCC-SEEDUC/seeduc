@@ -13,7 +13,8 @@ class ScheduleController extends Controller
      */
     public function index()
     {
-        return view('schedule.index', ['schedules' => Schedule::paginate(10) ]);
+        $schedules = Schedule::all();
+        return Response($schedules, 200);
     }
 
     /**
@@ -23,7 +24,7 @@ class ScheduleController extends Controller
      */
     public function create()
     {
-        return view('schedule.create');
+        //
     }
 
     /**
@@ -47,8 +48,9 @@ class ScheduleController extends Controller
         $schedule->finish_at = $request->input('finish_at');
 
         if($schedule->save()){
-            return redirect()->action('ScheduleController@index'); 
+            return Response($schedule, 200);
         }
+        return Response('Não foi possível realizar a operação', 500);
     }
 
     /**
@@ -59,7 +61,8 @@ class ScheduleController extends Controller
      */
     public function show($id)
     {
-        return view('schedule.show', ['schedules' => Schedule::find($id)]);
+        $schedule = Schedule::find($id);
+        return Response($schedule, 200);
     }
 
     /**
@@ -70,7 +73,7 @@ class ScheduleController extends Controller
      */
     public function edit($id)
     {
-        return view('schedule.edit', ['schedule' => Schedule::find($id)]);
+        //
     }
 
     /**
@@ -95,8 +98,9 @@ class ScheduleController extends Controller
         $schedule->finish_at = $request->input('finish_at');
 
         if($schedule->save()){
-            return redirect()->action('ScheduleController@index'); 
+            return Response($schedule, 200);
         }
+        return Response('Não foi possível realizar a operação', 500);
     }
 
     /**
@@ -108,7 +112,9 @@ class ScheduleController extends Controller
     public function destroy($id)
     {
         $schedule = Schedule::findOrFail($id);
-        $schedule->delete();
-        return redirect()->action('ScheduleController@index');
+        if($schedule->delete()){
+            return Response('Horário excluido com sucesso!', 200);
+        }
+        return Response('Não foi possível realizar a operação', 500); 
     }
 }

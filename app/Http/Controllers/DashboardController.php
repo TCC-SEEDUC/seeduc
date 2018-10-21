@@ -15,7 +15,8 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        return view('dashboard.index', ['events' => Event::paginate(10)]);
+        $events = Event::all();
+        return Response($events, 200);
     }
 
     /**
@@ -47,8 +48,9 @@ class DashboardController extends Controller
      */
     public function show($id)
     {
-        return view('dashboard.show', [ 'activities' => Activity::with('schedule')->where('event_id', $id)->get(), 
-            'event' => Event::where('id', $id)->get() ]);
+        $activities = [Activity::with('schedule')->where('event_id', $id)->get(), 
+            Event::where('id', $id)->get()];
+        return Response($activities, 200);
     }
 
     /**
