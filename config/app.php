@@ -147,6 +147,9 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
 
+        LaravelQRCode\Providers\QRCodeServiceProvider::class,
+        
+
         /*
          * Package Service Providers...
          */
@@ -216,6 +219,7 @@ return [
         'Html' => Collective\Html\HtmlFacade::class,
         'JWTAuth' => Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
         'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
+        'QRCode' => LaravelQRCode\Facades\QRCode::class,
     ],
 
 ];

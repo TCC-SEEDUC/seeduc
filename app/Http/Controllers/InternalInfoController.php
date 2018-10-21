@@ -14,7 +14,8 @@ class InternalInfoController extends Controller
      */
     public function index()
     {
-        return view('internal.index', ['infos' => Internal_info::paginate(10)]);
+        $infos = Internal_info::all();
+        return Response($infos, 200);
     }
 
     /**
@@ -24,7 +25,7 @@ class InternalInfoController extends Controller
      */
     public function create()
     {
-        return view('internal.create');
+        //
     }
 
     /**
@@ -48,8 +49,9 @@ class InternalInfoController extends Controller
         $info->register_id = $request->input('register_id');
 
         if($info->save()){
-            return redirect()->action('InternalInfoController@index'); 
+            return Response($info, 200);
         }
+        return Response('Não foi possível realizar a operação', 500); 
     }
 
     /**
@@ -60,8 +62,9 @@ class InternalInfoController extends Controller
      */
     public function show($id)
     {
-       return view('internal.show', ['info' => Internal_info::find($id)]);
-    }
+       $info = Internal_info::find($id);
+       return Response($info, 200);
+   }
 
     /**
      * Show the form for editing the specified resource.
@@ -71,7 +74,7 @@ class InternalInfoController extends Controller
      */
     public function edit($id)
     {
-        return view('internal.edit', ['info' => Internal_info::find($id)]);
+       //
     }
 
     /**
@@ -96,8 +99,9 @@ class InternalInfoController extends Controller
         $info->register_id = $request->input('register_id');
 
         if($info->save()){
-            return redirect()->action('InternalInfoController@index'); 
+            return Response($info, 200);
         }
+        return Response('Não foi possível realizar a operação', 500);
     }
 
     /**
@@ -110,7 +114,8 @@ class InternalInfoController extends Controller
     {
         $info = Internal_info::findOrFail($id);
         if($info->delete()){
-            return redirect()->action('InternalInfoController@index');
+            return Response('Interno excluido com sucesso!', 200);
         }
+        return Response('Não foi possível realizar a operação', 500); 
     }
 }

@@ -52,13 +52,14 @@ class SubscriptionController extends Controller
 
         if ($is_signed != true && $is_full != true && $event_time != true) {
             $subscription = new Subscription;
-                $subscription->user_id = $request->input('user_id');
-                $subscription->activity_id = $request->input('activity_id');
-                $subscription->event_id = $request->input('event_id');
+            $subscription->user_id = $request->input('user_id');
+            $subscription->activity_id = $request->input('activity_id');
+            $subscription->event_id = $request->input('event_id');
             if ($subscription->save()) 
-                return redirect()->action('FeedController@index');
+                return Response($subscription, 200);
+            return Response('Não foi possível realizar a operação', 500); 
         }
-        print_r("Já Cadastrado ou Cheio ou Evento no mesmo horário ");   
+        return Response("Já Cadastrado ou Cheio ou Evento no mesmo horário", 200);  
     }
 
     /**
@@ -71,6 +72,10 @@ class SubscriptionController extends Controller
     {
         #Através do dashboard-show, recebo o id de uma atividade para dar select nas inscrições da mesma. ($id referente a uma atividade) 
         return view('subscription.show', ['subscribers' => Activity::with('users', 'subscriptions')->where('id', $id)->paginate(10)]);
+        /*
+        $pdf = new GeneratePDF;
+        return $pdf->generateSubscriptionsList(1);
+        */
     }
 
     /**
@@ -98,7 +103,7 @@ class SubscriptionController extends Controller
         $subscription->certificate = $request->input('certificate', 0);
 
         if($subscription->save()){
-            return Redirect::back();
+            return Response($subscription, 200);
         }
     }
 
@@ -110,7 +115,9 @@ class SubscriptionController extends Controller
      */
     public function destroy($id)
     {
-        Subscription::destroy($id);
-        return redirect()->action('FeedController@index');
+        if(Subscription::destroy($id)){
+            return Response('inscrição cancelada com sucesso!', 200);
+        }
+        return Response('Não foi possível realizar a operação', 500); 
     }
 }

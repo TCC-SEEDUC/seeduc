@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Subscription;
+use App\Services\GeneratePDF;
+use PDF;
+
 
 class CertificateController extends Controller
 {
@@ -12,9 +15,10 @@ class CertificateController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $pdf = new GeneratePDF;
+        return $pdf->generateCertificate($request->input('event_id'), $request->input('user_id'));
     }
 
     /**
@@ -35,12 +39,7 @@ class CertificateController extends Controller
      */
     public function store(Request $request)
     {
-        print($request->input('activity_id'));
-        $user_subscriptions = Subscription::join('activities', 'subscriptions.activity_id', '=', 'activities.id')
-        ->join('users', 'subscriptions.user_id', '=', 'users.id')
-        ->where('activities.id', $request->input('activity_id'))
-        ->get();
-        print($user_subscriptions);
+        //
     }
 
     /**

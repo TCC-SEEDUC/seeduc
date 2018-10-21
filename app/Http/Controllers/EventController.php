@@ -14,7 +14,8 @@ class EventController extends Controller
      */
     public function index()
     {
-        return view('event.index', ['events' => Event::paginate(10)]);
+        $events = Event::all();
+        return Response($events, 200);
     }
 
     /**
@@ -24,7 +25,7 @@ class EventController extends Controller
      */
     public function create()
     {
-        return view('event.create');
+        //
     }
 
     /**
@@ -50,8 +51,9 @@ class EventController extends Controller
         $event->end_date = $request->input('end_date');
 
         if($event->save()){
-            return redirect()->action('EventController@index'); 
+            return Response($event, 200);
         }
+        return Response('Não foi possível realizar a operação', 500);
     }
 
     /**
@@ -62,8 +64,9 @@ class EventController extends Controller
      */
     public function show($id)
     {
-        return view('event.show', ['event' => Event::find($id)]);
-    }
+       $event = Event::find($id);
+       return Response($event, 200);
+   }
 
     /**
      * Show the form for editing the specified resource.
@@ -73,7 +76,7 @@ class EventController extends Controller
      */
     public function edit($id)
     {
-        return view('event.edit', ['event' => Event::find($id)]);
+        //
     }
 
     /**
@@ -100,8 +103,9 @@ class EventController extends Controller
         $event->end_date = $request->input('end_date');
 
         if($event->save()){
-            return redirect()->action('EventController@index'); 
-        }   
+            return Response($event, 200);
+        }
+        return Response('Não foi possível realizar a operação', 500);  
     }
 
     /**
@@ -113,7 +117,10 @@ class EventController extends Controller
     public function destroy($id)
     {
         $event = Event::findOrFail($id);
-        $event->delete();
-        return redirect()->action('EventController@index');
+        if($event->delete()){
+            return Response('Evento excluido com sucesso!', 200);
+        }
+        return Response('Não foi possível realizar a operação', 500); 
+
     }
 }

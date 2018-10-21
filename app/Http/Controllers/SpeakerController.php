@@ -14,7 +14,8 @@ class SpeakerController extends Controller
      */
     public function index()
     {
-        return view('speaker.index', ['speakers' => Speaker::paginate(10)]);
+        $speakers = Speaker::all();
+        return Response($speakers, 200);
     }
 
     /**
@@ -24,7 +25,7 @@ class SpeakerController extends Controller
      */
     public function create()
     {
-        return view('speaker.create');
+        //
     }
 
     /**
@@ -51,8 +52,9 @@ class SpeakerController extends Controller
         $speaker->website = $request->input('website');
 
         if($speaker->save()){
-            return redirect()->action('SpeakerController@index'); 
+            return Response($speaker, 200);
         }
+        return Response('Não foi possível realizar a operação', 500); 
     }
 
     /**
@@ -63,7 +65,8 @@ class SpeakerController extends Controller
      */
     public function show($id)
     {
-        return view('speaker.show', ['speaker' => Speaker::find($id)]);
+        $speakers = Speaker::find($id);
+        return Response($speakers, 200);
     }
 
     /**
@@ -74,7 +77,7 @@ class SpeakerController extends Controller
      */
     public function edit($id)
     {
-        return view('speaker.edit', ['speaker' => Speaker::find($id)]);
+        //
     }
 
     /**
@@ -102,8 +105,9 @@ class SpeakerController extends Controller
         $speaker->website = $request->input('website');
 
         if($speaker->save()){
-            return redirect()->action('SpeakerController@index'); 
+            return Response($speaker, 200);
         }
+        return Response('Não foi possível realizar a operação', 500); 
     }
 
     /**
@@ -116,7 +120,8 @@ class SpeakerController extends Controller
     {
         $speaker = Speaker::findOrFail($id);
         if($speaker->delete()){
-            return redirect()->action('SpeakerController@index');
+            return Response('Atração excluida com sucesso!', 200);
         }
+        return Response('Não foi possível realizar a operação', 500); 
     }
 }

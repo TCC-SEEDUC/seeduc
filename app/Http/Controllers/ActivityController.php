@@ -20,8 +20,8 @@ class ActivityController extends Controller
      */
     public function index()
     {
-        return view('activity.index', ['activities' => Activity::with('event', 'location', 'room', 'schedule')
-            ->paginate(10) ]);
+        $activities =  Activity::with('event', 'location', 'room', 'schedule')->get();
+        return Response($activities, 200);
     }
 
     /**
@@ -31,14 +31,7 @@ class ActivityController extends Controller
      */
     public function create()
     {
-        return view('activity.create', [
-            'events'  => Event::pluck('name', 'id'), 
-            'schedules'  => Schedule::pluck('name', 'id'), 
-            'locations'  => Location::pluck('name', 'id'),
-            'rooms'  => Room::pluck('name', 'id'),
-            'bonds' => Bond::pluck('name', 'id'),
-            'speakers' => Speaker::pluck('name', 'id'),
-        ]);
+        //
     }
 
     /**
@@ -76,8 +69,11 @@ class ActivityController extends Controller
         $activity->event_id = $request->input('event_id');
         $activity->location_id = $request->input('location_id');
         $activity->room_id = $request->input('room_id');
-        
-        $activity->save();
+
+        if($activity->save()){
+            return Response($activity, 200);
+        }
+        return Response('Não foi possível realizar a operação', 500); 
     }
 
     /**
@@ -88,8 +84,8 @@ class ActivityController extends Controller
      */
     public function show($id)
     {
-        return view('activity.show', ['activity' => Activity::with('event', 'location', 'room', 'schedule')
-            ->find($id) ]);
+        $activity = Activity::with('event', 'location', 'room', 'schedule')->find($id);
+        return Response($activity, 200);
     }
 
     /**
@@ -100,13 +96,7 @@ class ActivityController extends Controller
      */
     public function edit($id)
     {
-        return view('activity.edit', ['activity' => Activity::find($id), 'events'  => Event::pluck('name', 'id'), 
-            'schedules'  => Schedule::pluck('name', 'id'), 
-            'locations'  => Location::pluck('name', 'id'),
-            'rooms'  => Room::pluck('name', 'id'),
-            'bonds' => Bond::pluck('name', 'id'),
-            'speakers' => Speaker::pluck('name', 'id')]);
-        
+        //
     }
 
     /**
@@ -146,8 +136,13 @@ class ActivityController extends Controller
         $activity->location_id = $request->input('location_id');
         $activity->room_id = $request->input('room_id');
         
-        $activity->save();
+
         return redirect()->action('ActivityController@index');
+
+        if($activity->save()){
+            return Response($activity, 200);
+        }
+        return Response('Não foi possível realizar a operação', 500);  
     }
 
     /**
@@ -159,6 +154,9 @@ class ActivityController extends Controller
     public function destroy($id)
     {
         $activity = Activity::findOrFail($id);
-        $activity->delete();
+        if($activity->delete()){
+            return Response('Atividade excluida com sucesso!', 200);
+        }
+        return Response('Não foi possível realizar a operação', 500); 
     }
 }

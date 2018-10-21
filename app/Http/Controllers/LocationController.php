@@ -14,7 +14,8 @@ class LocationController extends Controller
      */
     public function index()
     {
-        return view('location.index', ['locations' => Location::paginate(10)]);
+        $locations = Location::all();
+        return Response($locations, 200);
     }
 
     /**
@@ -24,7 +25,7 @@ class LocationController extends Controller
      */
     public function create()
     {
-        return view('location.create');
+       //
     }
 
     /**
@@ -64,8 +65,9 @@ class LocationController extends Controller
         $location->manager_email = $request->input('manager_email');
 
         if($location->save()){
-            return redirect()->action('LocationController@index'); 
+            return Response($location, 200);
         }
+        return Response('Não foi possível realizar a operação', 500);
         
     }
 
@@ -77,7 +79,8 @@ class LocationController extends Controller
      */
     public function show($id)
     {
-        return view('location.show', ['location' => Location::find($id)]);
+        $location = Location::find($id);
+        return Response($location, 200);
     }
 
     /**
@@ -88,7 +91,7 @@ class LocationController extends Controller
      */
     public function edit($id)
     {
-        return view('location.edit', ['location' => Location::find($id)]);
+        //
     }
 
     /**
@@ -129,8 +132,9 @@ class LocationController extends Controller
         $location->manager_email = $request->input('manager_email');
 
         if($location->save()){
-            return redirect()->action('LocationController@index'); 
+            return Response($location, 200);
         }
+        return Response('Não foi possível realizar a operação', 500);
         
     }
 
@@ -143,7 +147,9 @@ class LocationController extends Controller
     public function destroy($id)
     {
         $location = Location::findOrFail($id);
-        $location->delete();
-        return redirect()->action('LocationController@index');
+        if($location->delete()){
+            return Response('Local excluido com sucesso!', 200);
+        }
+        return Response('Não foi possível realizar a operação', 500); 
     }
 }
