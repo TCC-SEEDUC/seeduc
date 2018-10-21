@@ -13,12 +13,12 @@ Route::post('register', 'AuthController@register');
 Route::post('recover', 'AuthController@recover');
 
 Route::group(['middleware' => ['jwt.auth']], function() {
+    Route::resource('events', 'EventController');
     Route::resource('activities', 'ActivityController');
     Route::get('qr-code', 'QrController@make');
     Route::resource('activities', 'ActivityController');
     Route::resource('certificates', 'CertificateController');
     Route::resource('dashboards', 'DashboardController');
-    Route::resource('events', 'EventController');
     Route::resource('feedbacks', 'FeedbackQuizController');
     Route::resource('feeds', 'FeedController');
     Route::resource('locations', 'LocationController');

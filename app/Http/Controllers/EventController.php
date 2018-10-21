@@ -118,7 +118,7 @@ class EventController extends Controller
     {
         $event = Event::findOrFail($id);
         if($event->delete()){
-            return Response('Evento excluido com sucesso!', 200);
+            return Response($event, 200);
         }
         return Response('Não foi possível realizar a operação', 500); 
 
