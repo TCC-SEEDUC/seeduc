@@ -133,7 +133,7 @@ class AuthController extends Controller
    public function login(Request $request)
    {
        $credentials = $request->only('email', 'password');
-       
+
        $rules = [
            'email' => 'required|email',
            'password' => 'required'
@@ -155,8 +155,15 @@ class AuthController extends Controller
            // something went wrong whilst attempting to encode the token
            return response()->json(['success' => false, 'error' => 'Failed to login, please try again.'], 500);
        }
+
+       $user = User::where('email', $request->email)->first();
+       if($user){ 
+        if(Hash::check($request->password, $user->password)){
+            return response()->json(['success' => true, 'data'=> [ 'token' => $token, 'user'=> $user]], 200);
+        }
+       }
        // all good so return the token
-       return response()->json(['success' => true, 'data'=> [ 'token' => $token ]], 200);
+       //return response()->json(['success' => true, 'data'=> [ 'token' => $token, 'user'=> $user]], 200);
    }
    /**
     * Log out
@@ -204,4 +211,5 @@ class AuthController extends Controller
             'success' => true, 'data'=> ['message'=> 'A reset email has been sent! Please check your email.']
         ]);
     }
+
 }

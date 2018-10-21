@@ -20,8 +20,8 @@ class ActivityController extends Controller
      */
     public function index()
     {
-        return view('activity.index', ['activities' => Activity::with('event', 'location', 'room', 'schedule')
-            ->paginate(10) ]);
+        $activities = Activity::with('event', 'location', 'room', 'schedule')->get();
+        return Response($activities,200);
     }
 
     /**
@@ -88,8 +88,8 @@ class ActivityController extends Controller
      */
     public function show($id)
     {
-        return view('activity.show', ['activity' => Activity::with('event', 'location', 'room', 'schedule')
-            ->find($id) ]);
+        $activities = Activity::with('event', 'location', 'room', 'schedule')->find($id);
+        return response($activities,200);
     }
 
     /**
