@@ -87,7 +87,7 @@ class ActivityController extends Controller
      */
     public function show($id)
     {
-        $activity = Activity::with('event', 'location', 'room', 'schedule')->find($id);
+        $activity = Activity::with('event', 'location', 'room', 'schedule', 'subscriptions', 'users')->find($id);
         return Response($activity, 200);
     }
 

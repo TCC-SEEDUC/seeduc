@@ -64,7 +64,7 @@ class EventController extends Controller
      */
     public function show($id)
     {
-       $event = Event::find($id);
+       $event = Event::with('activities','activities.location','activities.schedule','activities.room')->find($id);
        return Response($event, 200);
    }
 

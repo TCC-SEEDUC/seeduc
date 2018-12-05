@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AlterUserTable extends Migration
+class UpdateUserTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class AlterUserTable extends Migration
      */
     public function up()
     {
-        /*Schema::table('users', function($table) {
-            $table->integer('baase64_id')->unsigned();
-        });*/
+        Schema::table('users', function (Blueprint $table) {
+            $table->timestamp('email_verified_at')->nullable();
+        });
     }
 
     /**
@@ -25,8 +25,6 @@ class AlterUserTable extends Migration
      */
     public function down()
     {
-        Schema::table('subscriptions', function ($table) {
-            $table->dropColumn('baase64_id');
-        });
+        Schema::dropIfExists('users');
     }
 }

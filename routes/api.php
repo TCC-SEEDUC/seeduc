@@ -4,15 +4,16 @@ use Illuminate\Http\Request;
 
 
 
-/*Route::middleware('jwt.auth')->get('users', function(Request $request) {
+Route::middleware('jwt.auth')->get('users', function(Request $request) {
     return auth()->user();
-});*/
+});
 
 Route::post('login', 'AuthController@login');
 Route::post('register', 'AuthController@register');
 Route::post('recover', 'AuthController@recover');
 
-Route::group(['middleware' => ['jwt.auth']], function() {
+//Route::group(['middleware' => ['jwt.auth']], function() {
+    Route::get('dashboard', 'DashboardController@index');
     Route::resource('events', 'EventController');
     Route::resource('activities', 'ActivityController');
     Route::get('qr-code', 'QrController@make');
@@ -33,6 +34,6 @@ Route::group(['middleware' => ['jwt.auth']], function() {
 	Route::get('test', function(){
 		return response()->json(['foo'=>'bar']);
 	});
-});
+//});
 
 

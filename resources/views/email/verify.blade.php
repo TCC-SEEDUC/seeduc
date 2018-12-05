@@ -6,14 +6,14 @@
 <body>
 
 <div>
-    Hi {{ $name }},
+    Olá {{ $name }},
     <br>
-    Thank you for creating an account with us. Don't forget to complete your registration!
+    Obrigado por criar sua conta no SEEDUC. Não esqueça de completar sua inscrição!
     <br>
-    Please click on the link below or copy it into the address bar of your browser to confirm your email address:
+    Favor clique no link abaixo para confirmar seu cadastro :>
     <br>
 
-    <a href="{{ url('user/verify', $verification_code)}}">Confirm my email address </a>
+    <a href="{{ url('user/verify', $verification_code)}}"> Confirmar cadastro </a>
 
     <br/>
 </div>

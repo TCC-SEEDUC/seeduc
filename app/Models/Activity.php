@@ -8,8 +8,8 @@ class Activity extends Model
 {
     #One to One relationships
 
-    public function shedule(){
-        return $this->belongsTo('App\Models\Shedule');
+    public function schedule(){
+        return $this->belongsTo('App\Models\Schedule');
     }
 
     public function event(){
@@ -24,9 +24,6 @@ class Activity extends Model
         return $this->belongsTo('App\Models\Room');
     }
 
-    public function schedule(){
-        return $this->belongsTo('App\Models\Schedule');
-    }
 
     #One to Many relationships
     
@@ -45,7 +42,8 @@ class Activity extends Model
     }
 
     public function users(){
-        return $this->belongsToMany('App\Models\User', 'subscriptions', 'activity_id', 'user_id');
+        // O pivot é importante pois retorna as colunas relacionadas à inscrição, como a flag de certificado e check_in
+        return $this->belongsToMany('App\Models\User', 'subscriptions', 'activity_id', 'user_id')->withPivot('id','check_in','certificate');
     }
 
     public function feedbacks(){
