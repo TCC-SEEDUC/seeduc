@@ -8,13 +8,13 @@ class Subscription extends Model
 {
     #One to One relationships
     public function activity(){
-        return $this->belongsTo('App\Model\Activity');
+        return $this->belongsTo('App\Models\Activity');
     }
 
     public function user(){
-        return $this->belongsTo('App\Model\User');
+        return $this->belongsTo('App\Models\User');
     }
     #One to Many relationships
-
+    
     #Many to Many relationships
 }

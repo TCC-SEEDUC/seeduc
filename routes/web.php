@@ -15,7 +15,6 @@ Route::get('/', function () {
 });
 #Controllers Routes - Index, Create, Store, Show, Edit, Update & Destroy
 Route::resource('activities', 'ActivityController');
-Route::resource('certificates', 'CertificateController');
 Route::resource('dashboards', 'DashboardController');
 Route::resource('events', 'EventController');
 Route::resource('feedbacks', 'FeedbackQuizController');
@@ -36,4 +35,6 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.request');
 Route::post('password/reset', 'Auth\ResetPasswordController@postReset')->name('password.reset');
 */
+Route::resource('subscriptions', 'SubscriptionController');
+Route::resource('certificates', 'CertificateController');
 Route::get('user/verify/{verification_code}', 'AuthController@verifyUser');

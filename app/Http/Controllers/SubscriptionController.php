@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Activity;
 use App\Models\Subscription;
 use App\Services\Verificate;
 use App\Services\GeneratePDF;
@@ -19,7 +18,8 @@ class SubscriptionController extends Controller
      */
     public function index()
     {
-        //
+        $subscriptions = Subscription::with('activity','user')->get();
+        return Response($subscriptions, 200);
     }
 
     /**
@@ -73,10 +73,10 @@ class SubscriptionController extends Controller
     {
         #Através do dashboard-show, recebo o id de uma atividade para dar select nas inscrições da mesma. ($id referente a uma atividade) 
         //return view('subscription.show', ['subscribers' => Activity::with('users', 'subscriptions')->where('id', $id)->paginate(10)]);
-        return view('subscription.show', ['subscribers' => Activity::with('users', 'subscriptions')->where('id', 1)->paginate(10)]);
-        /*$pdf = new GeneratePDF;
-        return $pdf->generateSubscriptionsList(1);*/
-        
+        //return view('subscription.show', ['subscribers' => Activity::with('users', 'subscriptions')->where('id', 1)->paginate(10)]);
+        $pdf = new GeneratePDF;
+        return $pdf->generateSubscriptionsList($id);
+    
     }
 
     /**
@@ -100,8 +100,8 @@ class SubscriptionController extends Controller
     public function update(Request $request, $id)
     {
         $subscription = Subscription::find($id);
-        $subscription->check_in = $request->input('check_in', 0);
-        $subscription->certificate = $request->input('certificate', 0);
+        $subscription->check_in = $request->input('check_in',0);
+        $subscription->certificate = $request->input('certificate',0);
 
         if($subscription->save()){
             return Response($subscription, 200);

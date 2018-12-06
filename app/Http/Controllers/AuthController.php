@@ -89,13 +89,13 @@ class AuthController extends Controller
             'postal_code' => $postal_code,
             'phone_number' => $phone_number,
             'available_whatsapp' => $available_whatsapp,
-            'bond_id' => '1',
-            'role_id' => '1'
+            'bond_id' => $bond_id,
+            'role_id' => $role_id
         ]);
 
         $verification_code = str_random(30); //Generate verification code
         DB::table('user_verifications')->insert(['user_id'=>$user->id,'token'=>$verification_code]);
-        $subject = "Please verify your email address.";
+        $subject = "Cadastro SEEDUC";
                
         Mail::send('email.verify', ['name' => $name, 'verification_code' => $verification_code],
             function($mail) use ($email, $name, $subject){
@@ -126,14 +126,7 @@ class AuthController extends Controller
             $user->update(['is_verified' => 1]);
             DB::table('user_verifications')->where('token',$verification_code)->delete();
             
-            return `
-                <div style="width:100%;heigth:100%; background-color:grey; padding:50px; align: center; opacity: 0.7">
-                    <h1>PARABÉNS! Sua conta foi verificada com sucesso </h1>
-                    <a href="localhost:4200/login">
-                        Clique aqui para voltar ao login do SEEDUC
-                    </a>
-                </div>
-            `;
+            return view('email.verified');
 
 
             return response()->json([

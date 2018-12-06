@@ -15,6 +15,7 @@ Route::post('recover', 'AuthController@recover');
 //Route::group(['middleware' => ['jwt.auth']], function() {
     Route::get('dashboard', 'DashboardController@index');
     Route::resource('events', 'EventController');
+    Route::resource('bonds', 'BondController');
     Route::resource('activities', 'ActivityController');
     Route::get('qr-code', 'QrController@make');
     Route::resource('activities', 'ActivityController');
@@ -30,6 +31,7 @@ Route::post('recover', 'AuthController@recover');
     Route::resource('tickets', 'TicketController');
     Route::resource('infos', 'InternalInfoController');
     Route::resource('subscriptions', 'SubscriptionController');
+    Route::resource('values', 'GeneralValuesController');
 	Route::get('logout', 'AuthController@logout');
 	Route::get('test', function(){
 		return response()->json(['foo'=>'bar']);

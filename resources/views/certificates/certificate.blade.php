@@ -17,11 +17,9 @@
 		<img src="images/header2.png" style="width: 900px;">
 	</nav>
 	<div style="text-align: center;">
-
-		<p style="font-size: 28px;">Certificamos que VINICIUS <br> participou da 30º Semana da Educação Paulo Freire com o tema: <br><b>"Integralidade: o olhar, o pensar, o ser"</b> </p>
-		<p style="font-size: 23px;"> Carga Horária de 4 horas.</p>
-		<p style="font-size: 23px;"> Santos, {{ date('d/m/Y H:i:s') }}.</p>
-
+	 	<p style="font-size: 28px;">Certificamos que {{ $subscription[0]->user->name }} <br> participou da 30º Semana da Educação Paulo Freire com o tema <br><b>"{{ $subscription[0]->activity->name }}"</b> </p>
+   		 <p style="font-size: 23px;"> Carga Horária de 4 horas.</p>
+    	<p style="font-size: 23px;"> Santos, {{ date('d/m/Y H:i:s') }}.</p>
 	</div>
 	<div class="row"> 
 		<center>

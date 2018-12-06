@@ -21,7 +21,7 @@ class GeneratePDF
 		->where('users.id', $user_id)
 		->get();
 		print($user_subscriptions);
-		$pdf = PDF::loadView('certificates.certificate');
+		$pdf = PDF::loadView('certificates.certificate',['subscription' => $user_subscriptions]);
 		return $pdf->download("certificado.pdf");
 	}
 
